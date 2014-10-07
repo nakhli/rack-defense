@@ -9,13 +9,14 @@ module Rack
 
       def initialize(name, max_requests, time_period, store)
         @name, @max_requests, @time_period = name.to_s, max_requests.to_i, time_period.to_i
-        @key = "#{KEY_PREFIX}:#{@name}"
         @store = store
       end
 
-      def throttle?(timestamp=nil)
+      def throttle?(key, timestamp=nil)
         timestamp ||= (Time.now.utc.to_f * 1000).to_i
-        @store.eval SCRIPT, [@key], [timestamp, @max_requests, @time_period]
+        @store.eval SCRIPT,
+          ["#{KEY_PREFIX}:#{@name}:#{key}"],
+          [timestamp, @max_requests, @time_period]
       end
 
       SCRIPT = <<-LUA_SCRIPT

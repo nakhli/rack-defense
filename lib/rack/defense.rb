@@ -9,8 +9,11 @@ class Rack::Defense
     attr_accessor :throttled_response
 
     def throttle(name, max_requests, period, &block)
-      rule = Throttle.new(name, max_requests, period)
-      throttles[name] = ->(req) { block[req] && rule.throttle?(req) }
+      counter = Throttle.new(name, max_requests, period)
+      throttles[name] = lambda do |req|
+        key = block[req]
+        key && counter.throttle?(key)
+      end
     end
 
     def ban(name, &block)
@@ -49,7 +52,7 @@ class Rack::Defense
 
     private
 
-    attribute_accessor :config
+    attr_accessor :config
   end
 
   def initialize(app)
@@ -59,8 +62,8 @@ class Rack::Defense
   def call(env)
     klass = self.class
     req = ::Rack::Request.new(env)
-    return klass.config.banned_response if klass.banned? req
-    return klass.config.throttled_response if klass.throttled? req
+    return klass.config.banned_response.call(env) if klass.banned?(req)
+    return klass.config.throttled_response.call(env) if klass.throttled?(req)
     @app.call(env)
   end
 end
