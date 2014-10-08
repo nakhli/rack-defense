@@ -4,7 +4,7 @@ describe Rack::Defense::ThrottleCounter do
   before do
     Redis.current.flushdb
     @counter = Rack::Defense::ThrottleCounter.new('upload_photo', 5, 10, Redis.current)
-    @key = '127.0.0.1'
+    @key = '192.168.0.1'
   end
 
   describe '.throttle?' do
@@ -24,8 +24,8 @@ describe Rack::Defense::ThrottleCounter do
       (0..20).each { |i| assert @counter.throttle?(@key, 10 + i) }
     end
     it 'use a sliding window and not reset count after each full period' do
-      [6, 7, 8, 9].each { |t| refute @counter.throttle?(@key, t), "timestamp #{t}" }
-      [12, 13, 14].each { |t| assert @counter.throttle?(@key, t), "timestamp #{t}"}
+      [5, 6, 7, 8, 9].each { |t| refute @counter.throttle?(@key, t), "timestamp #{t}" }
+      [12, 13, 14, 15].each { |t| assert @counter.throttle?(@key, t), "timestamp #{t}"}
     end
     it 'should unblock after blocking requests' do
       do_max_requests_minus_one
@@ -34,15 +34,15 @@ describe Rack::Defense::ThrottleCounter do
       refute @counter.throttle? @key, 16
     end
     it 'should include throttled(blocked) request into the request count' do
-      [0, 1, 2, 3].each { |t| refute @counter.throttle?(@key, t), "timestamp #{t}" }
+      [0, 1, 2, 3, 4].each { |t| refute @counter.throttle?(@key, t), "timestamp #{t}" }
       assert @counter.throttle? @key, 10
-      [17, 18, 19].each { |t| refute @counter.throttle?(@key, t), "timestamp #{t}" }
+      [16, 17, 18, 19].each { |t| refute @counter.throttle?(@key, t), "timestamp #{t}" }
       assert @counter.throttle? @key, 20
     end
   end
 
   def do_max_requests_minus_one(offset=0)
-    [0, 3, 5, 9].map { |t| t + offset }.each do |t|
+    [0, 2, 3, 5, 9].map { |t| t + offset }.each do |t|
       refute @counter.throttle?(@key, t), "timestamp #{t}"
     end
   end

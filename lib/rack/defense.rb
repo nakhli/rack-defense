@@ -7,9 +7,17 @@ class Rack::Defense
   class Config
     attr_accessor :banned_response
     attr_accessor :throttled_response
+    attr_reader :bans
+    attr_reader :throttles
+
+    def initialize
+      @throttles, @bans = {}, {}
+      self.banned_response = ->(env) { [403, {'Content-Type' => 'text/plain'}, ["Forbidden\n"]] }
+      self.throttled_response = ->(env) { [429, {'Content-Type' => 'text/plain'}, ["Retry later\n"]] }
+    end
 
     def throttle(name, max_requests, period, &block)
-      counter = ThrottleCounter.new(name, max_requests, period)
+      counter = ThrottleCounter.new(name, max_requests, period, store)
       throttles[name] = lambda do |req|
         key = block[req]
         key && counter.throttle?(key)
@@ -29,30 +37,23 @@ class Rack::Defense
       # See https://github.com/redis/redis-rb
       @store ||= Redis.new
     end
-
-    @throttles = {}
-    @bans = {}
-    @banned_response = ->(env) { [403, {'Content-Type' => 'text/plain'}, ["Forbidden\n"]] }
-    @throttled_response = ->(env) { [429, {'Content-Type' => 'text/plain'}, ["Retry later\n"]] }
   end
 
   class << self
+    attr_accessor :config
+
     def setup(&block)
-      config = Config.new
+      self.config = Config.new
       yield config
     end
 
-    def banned?(req)
+    def ban?(req)
       config.bans.any? { |name, filter| filter.call(req) }
     end
 
-    def throttled?(req)
-      config.throtlles.any? { |name, filter| filter.call(req) }
+    def throttle?(req)
+      config.throttles.any? { |name, filter| filter.call(req) }
     end
-
-    private
-
-    attr_accessor :config
   end
 
   def initialize(app)
@@ -60,11 +61,10 @@ class Rack::Defense
   end
 
   def call(env)
-    klass = self.class
+    klass, config = self.class, self.class.config
     req = ::Rack::Request.new(env)
-    return klass.config.banned_response.call(env) if klass.banned?(req)
-    return klass.config.throttled_response.call(env) if klass.throttled?(req)
+    return config.banned_response[env] if klass.ban?(req)
+    return config.throttled_response[env] if klass.throttle?(req)
     @app.call(env)
   end
 end
-

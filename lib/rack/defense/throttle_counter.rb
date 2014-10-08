@@ -22,7 +22,7 @@ module Rack
       SCRIPT = <<-LUA_SCRIPT
       local key = KEYS[1]
       local timestamp, max_requests, time_period = tonumber(ARGV[1]), tonumber(ARGV[2]), tonumber(ARGV[3])
-      if redis.call('rpush', key, timestamp) < max_requests then
+      if redis.call('rpush', key, timestamp) <= max_requests then
         return false
       else
         return (timestamp - tonumber(redis.call('lpop', key))) <= time_period
