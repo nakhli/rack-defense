@@ -1,6 +1,6 @@
 module Rack
   class Defense
-    class Throttle
+    class ThrottleCounter
 
       KEY_PREFIX = 'rack-defense'
 

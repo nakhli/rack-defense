@@ -1,9 +1,9 @@
 require_relative 'spec_helper'
 
-describe 'Rack::Defense::Throttle' do
+describe Rack::Defense::ThrottleCounter do
   before do
     Redis.current.flushdb
-    @counter = Rack::Defense::Throttle.new('upload_photo', 5, 10, Redis.current)
+    @counter = Rack::Defense::ThrottleCounter.new('upload_photo', 5, 10, Redis.current)
     @key = '127.0.0.1'
   end
 

@@ -2,14 +2,14 @@ require 'rack'
 require 'redis'
 
 class Rack::Defense
-  autoload :Throttle, 'rack/defense/throttle'
+  autoload :ThrottleCounter, 'rack/defense/throttle_counter'
 
   class Config
     attr_accessor :banned_response
     attr_accessor :throttled_response
 
     def throttle(name, max_requests, period, &block)
-      counter = Throttle.new(name, max_requests, period)
+      counter = ThrottleCounter.new(name, max_requests, period)
       throttles[name] = lambda do |req|
         key = block[req]
         key && counter.throttle?(key)
