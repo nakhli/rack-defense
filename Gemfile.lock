@@ -2,8 +2,8 @@ PATH
   remote: .
   specs:
     rack-defense (0.1.0)
-      rack
-      redis
+      rack (~> 1.5.2)
+      redis (~> 3.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -20,8 +20,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  minitest
+  minitest (~> 5.4.2)
   rack-defense!
-  rack-test
-  rake
-  timecop
+  rack-test (~> 0.6.2)
+  rake (~> 10.3.2)
+  timecop (~> 0.7.1)
