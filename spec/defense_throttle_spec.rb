@@ -10,7 +10,7 @@ describe 'Rack::Defense::throttle' do
 
     #
     # configure the Rack::Defense middleware with two throttling
-    # startegies.
+    # strategies.
     #
     Rack::Defense.setup do |config|
       # allow only 3 post requests on path '/login' per PERIOD per ip

@@ -5,8 +5,8 @@ describe 'Rack::Defense::ban' do
 
   before do
     #
-    # configure the Rack::Defense middleware with two ban
-    # startegies.
+    # configure the Rack::Defense middleware with a ban
+    # strategy.
     #
     Rack::Defense.setup do |config|
       # allow only given ips on path
