@@ -19,7 +19,7 @@ class Rack::Defense
     def throttle(name, max_requests, period, &block)
       counter = ThrottleCounter.new(name, max_requests, period, store)
       throttles[name] = lambda do |req|
-        key = block[req]
+        key = block.call(req)
         key && counter.throttle?(key)
       end
     end
@@ -63,8 +63,8 @@ class Rack::Defense
   def call(env)
     klass, config = self.class, self.class.config
     req = ::Rack::Request.new(env)
-    return config.banned_response[env] if klass.ban?(req)
-    return config.throttled_response[env] if klass.throttle?(req)
+    return config.banned_response.call(env) if klass.ban?(req)
+    return config.throttled_response.call(env) if klass.throttle?(req)
     @app.call(env)
   end
 end
