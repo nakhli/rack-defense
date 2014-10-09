@@ -1,8 +1,5 @@
 require_relative 'spec_helper'
 describe 'Rack::Defense::ban' do
-  STATUS_OK = 200
-  STATUS_BANNED = 403
-
   before do
     #
     # configure the Rack::Defense middleware with a ban
@@ -31,7 +28,7 @@ describe 'Rack::Defense::ban' do
   def check_request(verb, path, ip)
     send verb, path, {}, 'REMOTE_ADDR' => ip
     expected_status = path == '/protected' && !['192.168.0.1', '127.0.0.1'].include?(ip) ?
-      STATUS_BANNED : STATUS_OK
+      status_banned : status_ok
     assert_equal expected_status, last_response.status
   end
 end

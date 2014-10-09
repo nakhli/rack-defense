@@ -1,8 +1,6 @@
 require_relative 'spec_helper'
 
 describe 'Rack::Defense::throttle' do
-  STATUS_OK = 200
-  STATUS_THROTTLED = 429
   PERIOD = 60 * 1000 # in milliseconds
 
   before do
@@ -67,11 +65,11 @@ describe 'Rack::Defense::throttle' do
       Timecop.freeze(time) do
         # the rule matches the '/search' path and not '/searchx'
         get '/searchx', {}, 'REMOTE_ADDR' => '192.168.0.1'
-        assert_equal STATUS_OK, last_response.status
+        assert_equal status_ok, last_response.status
 
         # the rule matches only get requests and not post
         post '/search', {}, 'REMOTE_ADDR' => '192.168.0.1'
-        assert_equal STATUS_OK, last_response.status
+        assert_equal status_ok, last_response.status
       end
     end
     10.times do |offset|
@@ -79,7 +77,7 @@ describe 'Rack::Defense::throttle' do
       Timecop.freeze(time) do
         # the rule matches only post and not get
         get '/login', {}, 'REMOTE_ADDR' => '192.168.0.1'
-        assert_equal STATUS_OK, last_response.status
+        assert_equal status_ok, last_response.status
       end
     end
   end
@@ -88,9 +86,9 @@ describe 'Rack::Defense::throttle' do
       time = @start_time + offset
       Timecop.freeze(time) do
         get '/searchx', {}, 'REMOTE_ADDR' => '192.168.0.1'
-        assert_equal STATUS_OK, last_response.status
+        assert_equal status_ok, last_response.status
         get '/search', {}, 'REMOTE_ADDR' => '192.168.0.1'
-        assert_equal offset < 30 ? STATUS_OK : STATUS_THROTTLED, last_response.status
+        assert_equal offset < 30 ? status_ok : status_throttled, last_response.status
       end
     end
   end
@@ -113,7 +111,7 @@ describe 'Rack::Defense::throttle' do
   def check_request(verb, path, time_offset, max_requests, ip, headers={})
     Timecop.freeze(@start_time + time_offset) do
       send verb, path, {}, headers.merge('REMOTE_ADDR' => ip)
-      expected_status = (time_offset % PERIOD) >= max_requests ? STATUS_THROTTLED : STATUS_OK
+      expected_status = (time_offset % PERIOD) >= max_requests ? status_throttled : status_ok
       assert_equal expected_status, last_response.status, "offset #{time_offset}"
     end
   end

@@ -7,6 +7,10 @@ require 'rack/defense'
 class MiniTest::Spec
   include Rack::Test::Methods
 
+  def status_ok; 200 end
+  def status_throttled; 429 end
+  def status_banned; 403 end
+
   def app
     Rack::Builder.new {
       use Rack::Defense
