@@ -90,7 +90,8 @@ Allow only a whitelist of ips for a given path:
 ```ruby
 Rack::Defense.setup do |config|
   config.ban('ip_whitelist') do |req|
-    req.path == '/protected' && !['192.168.0.1', '127.0.0.1'].include?(req.ip)                                        end
+    req.path == '/protected' && !['192.168.0.1', '127.0.0.1'].include?(req.ip)
+  end
 end
 ```
 
@@ -105,6 +106,18 @@ end
 
 ## Response configuration
 
+By default, Rack::Defense returns `429 Too Many Requests` and `403 Forbidden` respectively for throttled and banned requests. These responses can be fully configured in the setup:
+
+```ruby
+Rack::Defense.setup do |config|
+  config.banned_response =
+    ->(env) { [404, {'Content-Type' => 'text/plain'}, ["Not Found"]] }
+    
+  config.throttled_response =
+    ->(env) { [503, {'Content-Type' => 'text/plain'}, ["Service Unavailable"]] }
+  end
+end
+```
 
 ## License
 
