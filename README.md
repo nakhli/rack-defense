@@ -16,7 +16,7 @@ Rack::Defense is a Rack middleware that allows you to easily add request rate li
 
 Rack::Defense has a small footprint and only two dependencies: [rack](https://github.com/rack/rack) and [redis](https://github.com/redis/redis-rb).
 
-Rack::Defense is inspired from the [Rack::Attack](https://github.com/kickstarter/rack-attack) project. The main difference is the throttling algorithm: Rack:Attack uses a counter reset at the end of each period therefore allowing up to 2 times more requests than the maximum rate specified. We use a sliding window algorithm allowing a precise request rate limiting.
+Rack::Defense is inspired from the [Rack::Attack](https://github.com/kickstarter/rack-attack) project. The main difference is the throttling algorithm: Rack::Attack uses a counter reset at the end of each period therefore allowing up to 2 times more requests than the maximum rate specified. We use a sliding window algorithm allowing a precise request rate limiting.
 
 ## Getting started
 
