@@ -2,7 +2,6 @@ require_relative 'spec_helper'
 
 describe Rack::Defense::ThrottleCounter do
   before do
-    Redis.current.flushdb
     @counter = Rack::Defense::ThrottleCounter.new('upload_photo', 5, 10, Redis.current)
     @key = '192.168.0.1'
   end
