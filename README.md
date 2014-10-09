@@ -60,10 +60,11 @@ Throttle GET requests for path `/image` with a maximum rate of 50 request per se
 ```ruby
 Rack::Defense.setup do |config|
   config.throttle('api', 50, 1000) do |req|
-    req.env['HTTP_AUTHORIZATION'] if %r{^/api/} =~ req.path            
+    req.env['HTTP_AUTHORIZATION'] if %r{^/api/} =~ req.path
   end 
 end
 ```
+
 ### Redis Configuration
 
 Rack::Defense uses Redis to track request rates. By default, the `REDIS_URL` environment variable is used to setup the store. If not set, it falls back to host `127.0.0.1` port `6379`.
@@ -81,6 +82,29 @@ end
 ```
 
 ## Filtering
+
+Rack::Defense can reject requests based on arbitrary properties of the request. Matching requests are filtered.
+
+### Examples
+Allow only a whitelist of ips for a given path:
+```ruby
+Rack::Defense.setup do |config|
+  config.ban('ip_whitelist') do |req|
+    req.path == '/protected' && !['192.168.0.1', '127.0.0.1'].include?(req.ip)                                        end
+end
+```
+
+Allow only requests with a known API authorization token:
+```ruby
+Rack::Defense.setup do |config|
+  config.ban('allow_only_ip_list') do |req|
+    %r{^/api/} =~ req.path && Redis.current.sismember('apitokens', req.env['HTTP_AUTHORIZATION'])
+  end
+end
+```
+
+## Response configuration
+
 
 ## License
 
