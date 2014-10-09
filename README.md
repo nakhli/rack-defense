@@ -36,7 +36,7 @@ use Rack::Defense
 
 Add a `rack-defense.rb` file to `config/initalizers/`:
 ```ruby
-# In config/initializers/rack-attack.rb
+# In config/initializers/rack-defense.rb
 Rack::Defense.setup do |config|
   # your configuration here
 end
