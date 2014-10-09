@@ -24,8 +24,8 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'rack', '~> 1.5', '>= 1.5.2'
   s.add_dependency 'redis', '~> 3.1', '>= 3.1.0'
-  s.add_development_dependency 'rake', '~> 10.3', '>= 10.3.2'
-  s.add_development_dependency 'minitest', '~> 5.4', '>= 5.4.2'
-  s.add_development_dependency 'rack-test', '~> 0.6', '>= 0.6.2'
-  s.add_development_dependency 'timecop', '~> 0.7', '>= 0.7.1'
+  s.add_development_dependency 'rake', '~> 10.3'
+  s.add_development_dependency 'minitest', '~> 5.4'
+  s.add_development_dependency 'rack-test', '~> 0.6'
+  s.add_development_dependency 'timecop', '~> 0.7'
 end

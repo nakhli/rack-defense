@@ -20,8 +20,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  minitest (~> 5.4, >= 5.4.2)
+  minitest (~> 5.4)
   rack-defense!
-  rack-test (~> 0.6, >= 0.6.2)
-  rake (~> 10.3, >= 10.3.2)
-  timecop (~> 0.7, >= 0.7.1)
+  rack-test (~> 0.6)
+  rake (~> 10.3)
+  timecop (~> 0.7)

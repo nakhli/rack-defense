@@ -94,7 +94,6 @@ describe 'Rack::Defense::throttle' do
       end
     end
   end
-=end
   it 'should work with key in http header' do
     10.times do |offset|
       check_request(:get, '/api/action', offset, 5,
