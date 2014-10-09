@@ -125,9 +125,9 @@ end
 
 ## License
 
-Copyright [Sinbadsoft](http://www.sinbadsoft.com).
-
 Licensed under the [MIT License](http://opensource.org/licenses/MIT).
+
+Copyright Sinbadsoft.
 
 
 
