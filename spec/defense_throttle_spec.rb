@@ -22,6 +22,11 @@ describe 'Rack::Defense::throttle' do
       config.throttle('res', 30, PERIOD) do |req|
         req.ip if req.path == '/search' && req.get?
       end
+
+      # allow only 5 get requests on path /api/* per PERIOD per authorization token
+      config.throttle('api', 5, PERIOD) do |req|
+        req.env['HTTP_AUTHORIZATION'] if %r{^/api/} =~ req.path
+      end
     end
   end
   it 'allow ok post' do
@@ -89,6 +94,14 @@ describe 'Rack::Defense::throttle' do
       end
     end
   end
+=end
+  it 'should work with key in http header' do
+    10.times do |offset|
+      check_request(:get, '/api/action', offset, 5,
+        '192.168.0.1',
+        'HTTP_AUTHORIZATION' => 'token api_token_here')
+    end
+  end
 
   def check_get_request(time_offset=0, ip='192.168.0.1', path='/search')
     check_request(:get, path, time_offset, 30, ip)
@@ -98,9 +111,9 @@ describe 'Rack::Defense::throttle' do
     check_request(:post, path, time_offset, 3, ip)
   end
 
-  def check_request(verb, path, time_offset, max_requests, ip)
+  def check_request(verb, path, time_offset, max_requests, ip, headers={})
     Timecop.freeze(@start_time + time_offset) do
-      send verb, path, {}, 'REMOTE_ADDR' => ip
+      send verb, path, {}, headers.merge('REMOTE_ADDR' => ip)
       expected_status = (time_offset % PERIOD) >= max_requests ? STATUS_THROTTLED : STATUS_OK
       assert_equal expected_status, last_response.status, "offset #{time_offset}"
     end
