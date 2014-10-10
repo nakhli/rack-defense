@@ -61,7 +61,7 @@ Rack::Defense.setup do |config|
 end
 ```
 
-Throttle GET requests for path `/image` with a maximum rate of 50 request per second per API token
+Throttle GET requests for path `/api/*` with a maximum rate of 50 request per second per API token
 ```ruby
 Rack::Defense.setup do |config|
   config.throttle('api', 50, 1000) do |req|
