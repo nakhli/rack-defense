@@ -102,7 +102,7 @@ end
 Allow only requests with a known API authorization token:
 ```ruby
 Rack::Defense.setup do |config|
-  config.ban('allow_only_ip_list') do |req|
+  config.ban('validate_api_token') do |req|
     %r{^/api/} =~ req.path && Redis.current.sismember('apitokens', req.env['HTTP_AUTHORIZATION'])
   end
 end
