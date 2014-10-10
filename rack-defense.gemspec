@@ -22,8 +22,8 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 1.9.2'
 
-  s.add_dependency 'rack', '~> 1.5', '>= 1.5.2'
-  s.add_dependency 'redis', '~> 3.1', '>= 3.1.0'
+  s.add_dependency 'rack', '~> 1.3'
+  s.add_dependency 'redis', '~> 3'
   s.add_development_dependency 'rake', '~> 10.3'
   s.add_development_dependency 'minitest', '~> 5.4'
   s.add_development_dependency 'rack-test', '~> 0.6'

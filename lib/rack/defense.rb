@@ -1,5 +1,6 @@
 require 'rack'
 require 'redis'
+require 'delegate'
 
 class Rack::Defense
   autoload :ThrottleCounter, 'rack/defense/throttle_counter'
@@ -29,13 +30,15 @@ class Rack::Defense
     end
 
     def store=(value)
-      @store = value.is_a?(String) ? Redis.new(url: value) : value
+      value = Redis.new(url: value) if value.is_a?(String)
+      @store = SimpleDelegator::new(value) unless @store
+      @store.__setobj__(value)
     end
 
     def store
       # Redis.new uses REDIS_URL environment variable by default as URL.
       # See https://github.com/redis/redis-rb
-      @store ||= Redis.new
+      @store ||= SimpleDelegator.new(Redis.new)
     end
   end
 
