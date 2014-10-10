@@ -47,6 +47,7 @@ end
 ```
 
 ## Throttling
+
 The Rack::Defense middleware evaluates the throttling criterias (lambdas) against the incoming request. If the return value is falsy, the request is not throttled. Otherwise, the returned value is used as a key to throttle the request. The returned key could be the request IP, user name, API token or any discriminator to throttle the requests against.
 
 ### Examples
@@ -90,6 +91,7 @@ end
 Rack::Defense can reject requests based on arbitrary properties of the request. Matching requests are filtered.
 
 ### Examples
+
 Allow only a whitelist of ips for a given path:
 ```ruby
 Rack::Defense.setup do |config|
