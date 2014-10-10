@@ -16,7 +16,7 @@ Rack::Defense is a Rack middleware that allows you to easily add request rate li
 
 Rack::Defense has a small footprint and only two dependencies: [rack](https://github.com/rack/rack) and [redis](https://github.com/redis/redis-rb).
 
-Rack::Defense is inspired from the [Rack::Attack](https://github.com/kickstarter/rack-attack) project. The main difference is the throttling algorithm: Rack::Attack uses a counter reset at the end of each period therefore allowing up to 2 times more requests than the maximum rate specified. We use a sliding window algorithm allowing a precise request rate limiting.
+Rack::Defense is inspired from the [Rack::Attack](https://github.com/kickstarter/rack-attack) project. The main difference is the throttling algorithm: Rack::Attack uses a counter reset at the end of each period, therefore allowing up to 2 times more requests than the maximum rate specified. We use a sliding window algorithm allowing a precise request rate limiting.
 
 ## Getting started
 
@@ -47,7 +47,7 @@ end
 ```
 
 ## Throttling
-The Rack::Defense middleware evaluates the throttling criterias (lambadas) against the incoming request. If the return value is falsy, the request is not throttled. Otherwise, the returned value is used as a key to throttle the request. The returned key could be the request IP, user name, API token or any discriminator to throttle the requests against.
+The Rack::Defense middleware evaluates the throttling criterias (lambdas) against the incoming request. If the return value is falsy, the request is not throttled. Otherwise, the returned value is used as a key to throttle the request. The returned key could be the request IP, user name, API token or any discriminator to throttle the requests against.
 
 ### Examples
 
@@ -75,13 +75,13 @@ Rack::Defense uses Redis to track request rates. By default, the `REDIS_URL` env
 The redis store can be setup with either a connection url: 
 ```ruby
 Rack::Defense.setup do |config|
-  store = "redis://:p4ssw0rd@10.0.1.1:6380/15"
+  config.store = "redis://:p4ssw0rd@10.0.1.1:6380/15"
 end
 ```
 or directly with a connection object:
 ```ruby
 Rack::Defense.setup do |config|
-  store = Redis.new(host: "10.0.1.1", port: 6380, db: 15)
+  config.store = Redis.new(host: "10.0.1.1", port: 6380, db: 15)
 end
 ```
 
@@ -115,10 +115,10 @@ By default, Rack::Defense returns `429 Too Many Requests` and `403 Forbidden` re
 ```ruby
 Rack::Defense.setup do |config|
   config.banned_response =
-    ->(env) { [404, {'Content-Type' => 'text/plain'}, ["Not Found"]] }
+    ->(env) { [404, {'Content-Type' => 'text/plain'}, ["Not Found\n"]] }
     
   config.throttled_response =
-    ->(env) { [503, {'Content-Type' => 'text/plain'}, ["Service Unavailable"]] }
+    ->(env) { [503, {'Content-Type' => 'text/plain'}, ["Service Unavailable\n"]] }
   end
 end
 ```
