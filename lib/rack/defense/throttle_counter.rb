@@ -1,14 +1,15 @@
 module Rack
   class Defense
     class ThrottleCounter
-
       KEY_PREFIX = 'rack-defense'
 
-      attr_accessor :logger
       attr_accessor :name
 
       def initialize(name, max_requests, time_period, store)
         @name, @max_requests, @time_period = name.to_s, max_requests.to_i, time_period.to_i
+        raise ArgumentError, 'name should not be nil or empty' if @name.empty?
+        raise ArgumentError, 'max_requests should be greater than zero' unless @max_requests > 0
+        raise ArgumentError, 'time_period should be greater than zero' unless @time_period > 0
         @store = store
       end
 
@@ -30,7 +31,6 @@ module Rack
       LUA_SCRIPT
 
       private_constant :SCRIPT
-
     end
   end
 end

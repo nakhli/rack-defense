@@ -18,7 +18,7 @@ class Rack::Defense
     attr_reader :throttle_callbacks
 
     def initialize
-     self.banned_response = BANNED_RESPONSE
+      self.banned_response = BANNED_RESPONSE
       self.throttled_response = THROTTLED_RESPONSE
       @throttles, @bans = {}, {}
       default_value = ->(h,k) { h[k]=[] }
