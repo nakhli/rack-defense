@@ -52,7 +52,7 @@ The Rack::Defense middleware evaluates the throttling criterias (lambdas) agains
 
 ### Examples
 
-Throttle POST requests for path `/login` with a maximum rate of 3 request per minute per IP
+Throttle POST requests for path `/login` with a maximum rate of 3 request per minute per IP:
 ```ruby
 Rack::Defense.setup do |config|
   config.throttle('login', 3, 60 * 1000) do |req|
@@ -61,11 +61,20 @@ Rack::Defense.setup do |config|
 end
 ```
 
-Throttle GET requests for path `/api/*` with a maximum rate of 50 request per second per API token
+Throttle GET requests for path `/api/*` with a maximum rate of 50 request per second per API token:
 ```ruby
 Rack::Defense.setup do |config|
   config.throttle('api', 50, 1000) do |req|
     req.env['HTTP_AUTHORIZATION'] if %r{^/api/} =~ req.path
+  end 
+end
+```
+
+Throttle POST requests for path `/aggregate/report` with a maximum rate of 10 requests per hour for a given logged in user. We assume here that we are using the [Warden](https://github.com/hassox/warden) middleware for authentication or any Warden based authentication wrapper, like [Devise](https://github.com/plataformatec/devise) in Ruby on Rails.
+```ruby
+Rack::Defense.setup do |config|
+  config.throttle('aggregate_report', 10, 1.hour.in_milliseconds) do |req|
+    req.env['warden'].user.id if req.path == '/aggregate/report' && req.env['warden'].user
   end 
 end
 ```
