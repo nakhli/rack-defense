@@ -172,7 +172,7 @@ as values is passed.
 ```ruby
 Rack::Defense.setup do |config|
   config.after_throttle do |req, rules|
-    logger.info rules.map { |e| "rule name: #{e[0]} - rule throttle key: #{e[1]}" }.join ', '
+    logger.info rules.map { |e| "[Throttled] rule name: #{e[0]} - rule throttle key: #{e[1]}" }.join ', '
   end
 end
 ```
