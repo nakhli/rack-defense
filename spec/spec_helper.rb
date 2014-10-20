@@ -14,7 +14,7 @@ class MiniTest::Spec
   def app
     Rack::Builder.new {
       use Rack::Defense
-      run ->(env) { [200, {}, ['Hello World']] }
+      run ->(_) { [200, {}, ['Hello World']] }
     }.to_app
   end
 
