@@ -111,7 +111,7 @@ end
 
 ## Filtering
 
-Rack::Defense can reject requests based on arbitrary properties of the request. Matching requests are filtered.
+Rack::Defense can reject requests based on arbitrary properties of the request. Matching requests are filtered out.
 
 ### Examples
 
