@@ -28,10 +28,11 @@ describe 'Rack::Defense::throttle_expire_keys' do
       assert status_throttled, last_response.status
       assert redis.exists throttle_key
     else
-      puts "test too slow elapsed:#{elapsed}s expected < #{window}"
+      puts "Warning: test too slow elapsed:#{elapsed}s expected < #{window}"
     end
 
-    sleep window/1000
+    # Since Redis 2.6 the expire error is from 0 to 1 milliseconds. See http://redis.io/commands/expire
+    sleep (window / 1000) + 0.002
 
     refute redis.exists throttle_key
   end

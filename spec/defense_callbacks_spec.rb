@@ -50,7 +50,6 @@ describe 'Rack::Defense::callbacks' do
   end
 
   def check_callback_data(trace, matching_request_count, rule_data, req_path)
-    puts
     assert_equal matching_request_count, trace.length
     data = trace[-1]
     # check callback data
