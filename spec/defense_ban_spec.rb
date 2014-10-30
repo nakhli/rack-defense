@@ -8,7 +8,7 @@ describe 'Rack::Defense::ban' do
     Rack::Defense.setup do |config|
       # allow only given ips on path
       config.ban('allow_only_ip_list') do |req|
-        req.path == '/protected' && !['192.168.0.1', '127.0.0.1'].include?(req.ip)
+        req.path == '/protected' && !%w(192.168.0.1 127.0.0.1).include?(req.ip)
       end
     end
   end
@@ -27,7 +27,7 @@ describe 'Rack::Defense::ban' do
 
   def check_request(verb, path, ip)
     send verb, path, {}, 'REMOTE_ADDR' => ip
-    expected_status = path == '/protected' && !['192.168.0.1', '127.0.0.1'].include?(ip) ?
+    expected_status = path == '/protected' && !%w(192.168.0.1 127.0.0.1).include?(ip) ?
       status_banned : status_ok
     assert_equal expected_status, last_response.status
   end
