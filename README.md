@@ -116,7 +116,7 @@ Rack::Defense can reject requests based on arbitrary properties of the request. 
 
 ### Examples
 
-Allow only a whitelist of ips for a given path:
+Allow only a whitelist of IPs for a given path:
 
 ```ruby
 Rack::Defense.setup do |config|
@@ -177,6 +177,35 @@ Rack::Defense.setup do |config|
   end
 end
 ```
+
+## Advanced Examples
+
+### Temporarily suspend access to suspicious IPs
+
+When an IP is exceeding the permitted request rate, it is not only throttled but banned for a given period of time:
+
+```ruby
+Rack::Defense.setup do |config|
+  config.throttle('reset_password', 10, 10.minutes.in_milliseconds) do |req|
+    req.ip if req.path == '/api/users/password' && req.post?
+  end
+
+  config.after_throttle do |req, rules|
+    config.store.setex("ban:ip:#{req.ip}", 1.hour, 1) if rules.key? 'reset_password'
+  end
+
+  config.ban('blacklist') do |req|
+    config.store.keys("ban:ip:#{ req.ip }").any?
+  end
+end
+```
+
+The first rule named `reset_password` defines the maximum permitted rate per ip for post requests on path
+`/api/users/password`. Once a user exceeds this limit, it gets throttled and denied access to the resource.
+This raises a throttle event and triggers the `after_throttle` callback defined above. The callback sets a key in the redis store post-fixed with the user IP and having 1 hour an expiration time.
+
+The last rule named `blacklist` looks up each incoming request IP and checks if it has a corresponding ban key
+in redis. If the request IP matches a ban key it gets denied.
 
 ## License
 
