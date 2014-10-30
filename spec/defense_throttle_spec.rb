@@ -1,28 +1,30 @@
 require_relative 'spec_helper'
 
 describe 'Rack::Defense::throttle' do
-  PERIOD = 60 * 1000 # in milliseconds
+  def window
+    60 * 1000 # in milliseconds
+  end
 
   before do
     @start_time = Time.utc(2015, 10, 30, 21, 0, 0)
 
     #
-    # configure the Rack::Defense middleware with two throttling
+    # configure the Rack::Defense middleware with throttling
     # strategies.
     #
     Rack::Defense.setup do |config|
-      # allow only 3 post requests on path '/login' per PERIOD per ip
-      config.throttle('login', 3, PERIOD) do |req|
+      # allow only 3 post requests on path '/login' per #window per ip
+      config.throttle('login', 3, window) do |req|
         req.ip if req.path == '/login' && req.post?
       end
 
-      # allow only 50 get requests on path '/search' per PERIOD per ip
-      config.throttle('res', 30, PERIOD) do |req|
+      # allow only 30 get requests on path '/search' per #window per ip
+      config.throttle('res', 30, window) do |req|
         req.ip if req.path == '/search' && req.get?
       end
 
-      # allow only 5 get requests on path /api/* per PERIOD per authorization token
-      config.throttle('api', 5, PERIOD) do |req|
+      # allow only 5 get requests on path /api/* per #window per authorization token
+      config.throttle('api', 5, window) do |req|
         req.env['HTTP_AUTHORIZATION'] if %r{^/api/} =~ req.path
       end
     end
@@ -35,27 +37,27 @@ describe 'Rack::Defense::throttle' do
   end
   it 'ban get requests higher than acceptable rate' do
     10.times do |period|
-      50.times { |offset| check_get_request(offset + period*PERIOD) }
+      50.times { |offset| check_get_request(offset + period*window) }
     end
   end
   it 'ban post requests higher than acceptable rate' do
     10.times do |period|
-      7.times { |offset| check_post_request(offset + period*PERIOD) }
+      7.times { |offset| check_post_request(offset + period*window) }
     end
   end
-  it 'not have side effects between differrent throttle rules with mixed requests' do
+  it 'not have side effects between different throttle rules with mixed requests' do
     10.times do |period|
       50.times do |offset|
-        check_get_request(offset + period*PERIOD)
-        check_post_request(offset + period*PERIOD)
+        check_get_request(offset + period*window)
+        check_post_request(offset + period*window)
       end
     end
   end
   it 'not have side effects between request filtered by the same rule but with different keys' do
     10.times do |period|
       50.times do |offset|
-        check_get_request(offset + period*PERIOD, ip='192.168.0.1')
-        check_get_request(offset + period*PERIOD, ip='192.168.0.2')
+        check_get_request(offset + period*window, ip='192.168.0.1')
+        check_get_request(offset + period*window, ip='192.168.0.2')
       end
     end
   end
@@ -111,7 +113,7 @@ describe 'Rack::Defense::throttle' do
   def check_request(verb, path, time_offset, max_requests, ip, headers={})
     Timecop.freeze(@start_time + time_offset) do
       send verb, path, {}, headers.merge('REMOTE_ADDR' => ip)
-      expected_status = (time_offset % PERIOD) >= max_requests ? status_throttled : status_ok
+      expected_status = (time_offset % window) >= max_requests ? status_throttled : status_ok
       assert_equal expected_status, last_response.status, "offset #{time_offset}"
     end
   end
