@@ -27,7 +27,7 @@ module Rack
                        (timestamp - time_period) <= tonumber(redis.call('lpop', key))
       redis.call('pexpire', key, time_period)
       return throttle
-LUA_SCRIPT
+      LUA_SCRIPT
 
       private_constant :SCRIPT
     end
