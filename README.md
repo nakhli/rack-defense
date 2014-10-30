@@ -11,9 +11,9 @@ A Rack middleware for throttling and filtering requests.
 
 Rack::Defense is a Rack middleware that allows to easily add request rate limiting and request filtering to your Rack based application (Ruby On Rails, Sinatra etc.).
 
-* Request throttling (aka rate limiting) happens on __sliding window__ using the provided period, request criteria and maximum request number. It uses Redis to track the request rate.
+* [Request throttling](#throttling) (aka rate limiting) happens on __sliding window__ using the provided period, request criteria and maximum request number. It uses Redis to track the request rate.
 
-* Request filtering bans (rejects) requests based on provided criteria.
+* [Request filtering](#filtering) bans (rejects) requests based on provided criteria.
 
 Rack::Defense has a small footprint and only two dependencies: [rack](https://github.com/rack/rack) and [redis](https://github.com/redis/redis-rb).
 
