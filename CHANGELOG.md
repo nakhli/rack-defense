@@ -2,8 +2,8 @@
 tag 0.2.1
 
 * Added auto-expiration of redis throttle keys using the redis command [PEXPIRE](http://redis.io/commands/pexpire).
-A throttle keys is therefore automatically cleaned up if no activity is recorded against it for more than the specified
-throttle period.
+A throttle key is automatically cleaned up by redis if no activity is recorded against this key for more
+than the specified throttle period.
 
 # 0.2.0
 tag 0.2.0
