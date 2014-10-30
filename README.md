@@ -195,7 +195,7 @@ Rack::Defense.setup do |config|
   end
 
   config.ban('blacklist') do |req|
-    config.store.keys("ban:ip:#{ req.ip }").any?
+    config.store.exists("ban:ip:#{ req.ip }")
   end
 end
 ```
