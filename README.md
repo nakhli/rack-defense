@@ -206,7 +206,7 @@ Rack::Defense.setup do |config|
   end
 
   config.ban('blacklist') do |req|
-    config.store.exists("ban:ip:#{ req.ip }")
+    config.store.exists("ban:ip:#{req.ip}")
   end
 end
 ```
