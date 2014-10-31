@@ -126,6 +126,17 @@ Rack::Defense.setup do |config|
 end
 ```
 
+Deny access to a blacklist of application users. Again, we assume here that 
+[Warden](https://github.com/hassox/warden) or any Warden based authentication wrapper, like [Devise](https://github.com/plataformatec/devise), is used:
+
+```ruby
+Rack::Defense.setup do |config|
+  config.ban('user_blacklist') do |req|
+    ['hacker@example.com', 'badguy@example.com'].include? req.env['warden'].user.email
+  end 
+end
+```
+
 Allow only requests with a known API authorization token:
 
 ```ruby
@@ -200,7 +211,7 @@ Rack::Defense.setup do |config|
 end
 ```
 
-The first rule named `reset_password` defines the maximum permitted rate per ip for post requests on path
+The first rule named `reset_password` defines the maximum permitted rate per IP for post requests on path
 `/api/users/password`. Once a user exceeds this limit, it gets throttled and denied access to the resource.
 This raises a throttle event and triggers the `after_throttle` callback defined above. The callback sets a key in the redis store post-fixed with the user IP and having 1 hour an expiration time.
 
