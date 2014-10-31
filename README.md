@@ -193,7 +193,7 @@ end
 
 ### Temporarily suspend access to suspicious IPs
 
-When an IP is exceeding the permitted request rate, it is not only throttled but banned for a given period of time:
+In this example, when an IP is exceeding the permitted request rate, we would like to ban this IP for a given period of time:
 
 ```ruby
 Rack::Defense.setup do |config|
