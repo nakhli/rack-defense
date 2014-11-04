@@ -202,7 +202,7 @@ Rack::Defense.setup do |config|
   end
 
   config.after_throttle do |req, rules|
-    config.store.setex("ban:ip:#{req.ip}", 1.hour, 1) if rules.key? 'reset_password'
+    config.store.setex("ban:ip:#{req.ip}", 1.hour.in_milliseconds, 1) if rules.key? 'reset_password'
   end
 
   config.ban('blacklist') do |req|
