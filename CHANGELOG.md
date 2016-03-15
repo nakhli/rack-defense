@@ -1,3 +1,8 @@
+# 0.2.3
+tag 0.2.3
+
+Update dependencies.
+
 # 0.2.2
 tag 0.2.2
 
