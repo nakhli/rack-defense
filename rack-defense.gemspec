@@ -10,11 +10,11 @@ Gem::Specification.new do |s|
   s.license = 'MIT'
 
   s.authors = ['Chaker Nakhli']
-  s.email = ['chaker.nakhli@sinbadsoft.com']
+  s.email = ['chaker.nakhli@gmail.com']
 
   s.files = Dir.glob('{bin,lib}/**/*') + %w(Rakefile README.md)
   s.test_files = Dir.glob('spec/**/*')
-  s.homepage = 'http://github.com/sinbadsoft/rack-defense'
+  s.homepage = 'http://github.com/nakhli/rack-defense'
   s.rdoc_options = ['--charset=UTF-8']
   s.require_paths = ['lib']
   s.summary = 'Throttle and filter requests'

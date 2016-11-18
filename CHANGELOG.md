@@ -1,3 +1,8 @@
+# 0.2.4
+tag 0.2.4
+
+Update dependencies and author info in gemspec.
+
 # 0.2.3
 tag 0.2.3
 
