@@ -6,7 +6,7 @@ A Rack middleware for throttling and filtering requests.
 [![Build Status](https://travis-ci.org/Sinbadsoft/rack-defense.svg)](https://travis-ci.org/Sinbadsoft/rack-defense)
 [![Security](https://hakiri.io/github/Sinbadsoft/rack-defense/master.svg)](https://hakiri.io/github/Sinbadsoft/rack-defense/master)
 [![Code Climate](https://codeclimate.com/github/Sinbadsoft/rack-defense/badges/gpa.svg)](https://codeclimate.com/github/Sinbadsoft/rack-defense)
-[![Dependency Status](https://gemnasium.com/Sinbadsoft/rack-defense.svg)](https://gemnasium.com/Sinbadsoft/rack-defense)
+[![Dependency Status](https://gemnasium.com/nakhli/rack-defense.svg)](https://gemnasium.com/nakhli/rack-defense)
 [![Gem Version](https://badge.fury.io/rb/rack-defense.svg)](http://badge.fury.io/rb/rack-defense)
 
 Rack::Defense is a Rack middleware that allows to easily add request rate limiting and request filtering to your Rack based application (Ruby On Rails, Sinatra etc.).
