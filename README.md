@@ -3,9 +3,9 @@ Rack::Defense
 
 A Rack middleware for throttling and filtering requests.
 
-[![Build Status](https://travis-ci.org/Sinbadsoft/rack-defense.svg)](https://travis-ci.org/Sinbadsoft/rack-defense)
-[![Security](https://hakiri.io/github/Sinbadsoft/rack-defense/master.svg)](https://hakiri.io/github/Sinbadsoft/rack-defense/master)
-[![Code Climate](https://codeclimate.com/github/Sinbadsoft/rack-defense/badges/gpa.svg)](https://codeclimate.com/github/Sinbadsoft/rack-defense)
+[![Build Status](https://travis-ci.org/nakhli/rack-defense.svg)](https://travis-ci.org/nakhli/rack-defense)
+[![Security](https://hakiri.io/github/nakhli/rack-defense/master.svg)](https://hakiri.io/github/nakhli/rack-defense/master)
+[![Code Climate](https://codeclimate.com/github/nakhli/rack-defense/badges/gpa.svg)](https://codeclimate.com/github/nakhli/rack-defense)
 [![Dependency Status](https://gemnasium.com/nakhli/rack-defense.svg)](https://gemnasium.com/nakhli/rack-defense)
 [![Gem Version](https://badge.fury.io/rb/rack-defense.svg)](http://badge.fury.io/rb/rack-defense)
 
@@ -222,5 +222,5 @@ in redis. If the request IP matches a ban key it gets denied.
 
 Licensed under the [MIT License](http://opensource.org/licenses/MIT).
 
-Copyright Sinbadsoft.
+Copyright Chaker Nakhli.
 
