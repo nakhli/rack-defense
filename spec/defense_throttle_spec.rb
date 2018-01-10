@@ -7,6 +7,11 @@ describe 'Rack::Defense::throttle' do
 
   before do
     @start_time = Time.utc(2015, 10, 30, 21, 0, 0)
+    @user = {
+      :name => "tester man",
+      :max_requests => 5,
+      :period => window
+    }
 
     #
     # configure the Rack::Defense middleware with throttling
@@ -27,6 +32,15 @@ describe 'Rack::Defense::throttle' do
       config.throttle('api', 5, window) do |req|
         req.env['HTTP_AUTHORIZATION'] if %r{^/api/} =~ req.path
       end
+
+      # get max_requests and period from a object in lambda
+      max_requests = lambda{ |req| @user[:max_requests] }
+      period = lambda{ |req| @user[:period] }
+      
+      config.throttle('api', max_requests, period) do |req|
+        req.env['HTTP_AUTHORIZATION'] if %r{^/api/} =~ req.path
+      end
+
     end
   end
   it 'allow ok post' do
