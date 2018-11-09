@@ -1,3 +1,9 @@
+# 0.2.6
+tag 0.2.6
+
+Update rack version due to vulnerability
+Update redis version
+
 # 0.2.5
 tag 0.2.5
 
