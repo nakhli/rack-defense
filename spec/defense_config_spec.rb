@@ -26,7 +26,7 @@ describe Rack::Defense::Config do
     end
 
     def conn_url(conn)
-      conn.client.options[:url]
+      "redis://#{conn.connection[:host]}:#{conn.connection[:port]}"
     end
   end
 end
