@@ -26,8 +26,15 @@ class Rack::Defense
 
     def throttle(rule_name, max_requests, period, &block)
       raise ArgumentError, 'rule name should not be nil' unless rule_name
-      counter = ThrottleCounter.new(rule_name, max_requests, period, store)
-      throttles[rule_name] = lambda do |req|
+      
+      throttles[rule_name] = lambda do |req|  
+        max_requests = max_requests.respond_to?(:call) ? max_requests.call(req) : max_requests
+        period = period.respond_to?(:call) ? period.call(req) : period
+
+        raise ArgumentError, 'max_requests should be a number' unless max_requests.is_a?(Numeric)
+        raise ArgumentError, 'period should be a number' unless period.is_a?(Numeric)
+
+        counter = ThrottleCounter.new(rule_name, max_requests, period, store)
         key = block.call(req)
         key if key && counter.throttle?(key)
       end
